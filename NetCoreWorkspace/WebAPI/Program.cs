@@ -1,12 +1,16 @@
-using Business.Abstract;
-using Business.Concrete;
-using DataAccess.Abstract;
-using DataAccess.Concrete.EntityFramework;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Business.DependencyResolvers.Autofac;
 
 namespace WebAPI {
 	public class Program {
 		public static void Main(string[] args) {
+
 			var builder = WebApplication.CreateBuilder(args);
+
+			// Autofac
+			builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+				.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
 
 			// Add services to the container.
 
@@ -17,8 +21,8 @@ namespace WebAPI {
 
 			// Autofac, Ninject, CastleWindsor, StructureMap, LightInject, DryInject -> IoC Container
 			// AOP
-			builder.Services.AddSingleton<IProductService, ProductManager>();
-			builder.Services.AddSingleton<IProductDal, EfProductDal>();
+			// builder.Services.AddSingleton<IProductService, ProductManager>();
+			// builder.Services.AddSingleton<IProductDal, EfProductDal>();
 
 			var app = builder.Build();
 
