@@ -1,10 +1,12 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.DTOs;
 using Entities.Concrete;
-using System.Diagnostics;
+using FluentValidation;
 
 namespace Business.Concrete {
 	public class ProductManager : IProductService {
@@ -15,12 +17,8 @@ namespace Business.Concrete {
         }
 
 		public IResult Add(Product product) {
-			if (product.UnitPrice < 0) {
-				return new ErrorResult(Messages.UnitPriceInvalid);
-			}
-			if (product.ProductName.Length < 2) {
-				return new ErrorResult(Messages.ProductNameInvalid);
-			}
+			ValidationTool.Validate(new ProductValidator(), product);
+
 			_productDal.Add(product);
 			return new SuccessResult(Messages.ProductAdded);
 		}
