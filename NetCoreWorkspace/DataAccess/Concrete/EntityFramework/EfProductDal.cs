@@ -1,6 +1,6 @@
 ﻿using Core.DataAccess.EntityFramework;
 using DataAccess.Abstract;
-using DataAccess.DTOs;
+using Entities.DTOs;
 using Entities.Concrete;
 
 namespace DataAccess.Concrete.EntityFramework {

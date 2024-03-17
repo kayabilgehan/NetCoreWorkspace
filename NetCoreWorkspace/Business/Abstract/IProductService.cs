@@ -1,5 +1,5 @@
 ﻿using Core.Utilities.Results;
-using DataAccess.DTOs;
+using Entities.DTOs;
 using Entities.Concrete;
 
 namespace Business.Abstract {

@@ -1,6 +1,13 @@
+using System;
+using System.Collections.Generic;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Business.DependencyResolvers.Autofac;
+using Core.Utilities.Security.Encryption;
+using Core.Utilities.Security.IoC;
+using Core.Utilities.Security.JWT;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebAPI {
 	public class Program {
@@ -19,6 +26,25 @@ namespace WebAPI {
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 
+			builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+			var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+
+			builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+				.AddJwtBearer(options => {
+					options.TokenValidationParameters = new TokenValidationParameters {
+						ValidateIssuer = true,
+						ValidateAudience = true,
+						ValidateLifetime = true,
+						ValidIssuer = tokenOptions.Issuer,
+						ValidAudience = tokenOptions.Audience,
+						ValidateIssuerSigningKey = true,
+						IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
+					};
+				});
+
+			ServiceTool.Create(builder.Services);
+
 			// Autofac, Ninject, CastleWindsor, StructureMap, LightInject, DryInject -> IoC Container
 			// AOP
 			// builder.Services.AddSingleton<IProductService, ProductManager>();
@@ -33,6 +59,8 @@ namespace WebAPI {
 			}
 
 			app.UseHttpsRedirection();
+
+			app.UseAuthentication();
 
 			app.UseAuthorization();
 
