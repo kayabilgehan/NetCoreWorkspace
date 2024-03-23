@@ -21,7 +21,7 @@ namespace Business.Concrete {
 			_categoryService = categoryService;
         }
 
-		[SecuredOperation("admin")]
+		[SecuredOperation("product.add,admin")]
 		[ValidationAspect(typeof(ProductValidator))]
 		public IResult Add(Product product) {
 			IResult result = BusinessRules.Run(CheckIfProductCountOfCategoryCorrect(product.CategoryId),
@@ -45,6 +45,7 @@ namespace Business.Concrete {
 			return new SuccessResult(Messages.ProductAdded);
 		}
 
+		[CacheAspect] // key, value pair
 		public IDataResult<List<Product>> GetAll() {
 			//if (DateTime.Now.Hour == 15) {
 			//	return new ErrorDataResult<List<Product>>(Messages.SystemMaintenanceError);

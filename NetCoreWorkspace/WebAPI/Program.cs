@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Business.DependencyResolvers.Autofac;
+using Core.Utilities.IoC;
 using Core.Utilities.Security.Encryption;
-using Core.Utilities.Security.IoC;
 using Core.Utilities.Security.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Core.Extensions;
+using Core.DependencyResolvers;
 
-namespace WebAPI {
-	public class Program {
+namespace WebAPI
+{
+    public class Program {
 		public static void Main(string[] args) {
 
 			var builder = WebApplication.CreateBuilder(args);
@@ -25,8 +28,6 @@ namespace WebAPI {
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
-
-			builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 			var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
@@ -43,7 +44,9 @@ namespace WebAPI {
 					};
 				});
 
-			ServiceTool.Create(builder.Services);
+			builder.Services.AddDependencyResolvers(new ICoreModule[] {
+				new CoreModule()
+			});
 
 			// Autofac, Ninject, CastleWindsor, StructureMap, LightInject, DryInject -> IoC Container
 			// AOP
