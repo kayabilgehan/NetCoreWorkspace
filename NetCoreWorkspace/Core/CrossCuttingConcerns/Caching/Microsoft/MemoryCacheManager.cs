@@ -15,7 +15,7 @@ namespace Core.CrossCuttingConcerns.Caching.Microsoft {
 
         public MemoryCacheManager()
         {
-			ServiceTool.ServiceProvider.GetService<IMemoryCache>());
+			ServiceTool.ServiceProvider.GetService<IMemoryCache>();
 		}
 
         public void Add(string key, object value, int duration) {
@@ -24,6 +24,10 @@ namespace Core.CrossCuttingConcerns.Caching.Microsoft {
 
 		public T Get<T>(string key) {
 			return _memoryCache.Get<T>(key);
+		}
+
+		public object Get(string key) {
+			return _memoryCache.Get(key);
 		}
 
 		public bool IsAdd(string key) {
