@@ -15,7 +15,7 @@ namespace Core.CrossCuttingConcerns.Caching.Microsoft {
 
         public MemoryCacheManager()
         {
-			ServiceTool.ServiceProvider.GetService<IMemoryCache>();
+			_memoryCache = ServiceTool.ServiceProvider.GetService<IMemoryCache>();
 		}
 
         public void Add(string key, object value, int duration) {
