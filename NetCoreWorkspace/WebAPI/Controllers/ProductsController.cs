@@ -3,6 +3,7 @@ using Business.Concrete;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 
 namespace WebAPI.Controllers {
 	[Route("api/[controller]")]
@@ -11,8 +12,7 @@ namespace WebAPI.Controllers {
 		// Loosely coupled
 		// IoC Container -- Inversion of Control
 		IProductService _productService;
-		public ProductsController(IProductService productService)
-        {
+		public ProductsController(IProductService productService) {
 			_productService = productService;
 		}
 
@@ -35,12 +35,22 @@ namespace WebAPI.Controllers {
 			return BadRequest(result);
 		}
 
+		[HttpGet("getbycategory")]
+		public IActionResult GetByCategory(int categoryId) {
+			var result = _productService.GetAllByCategoryId(categoryId);
+			if (result.Success) {
+				return Ok(result);
+			}
+			return BadRequest(result);
+		}
+
 		[HttpPost("add")]
 		public IActionResult Add(Product product) {
 			var result = _productService.Add(product);
 			if (result.Success) {
 				return Ok(result);
 			}
+
 			return BadRequest(result);
 		}
 	}
