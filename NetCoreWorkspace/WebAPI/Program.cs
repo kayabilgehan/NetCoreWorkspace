@@ -63,6 +63,8 @@ namespace WebAPI
 				app.UseSwaggerUI();
 			}
 
+			app.ConfigureCustomExceptionMiddleware();
+
 			//Cors Step 2
 			app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader());
 
