@@ -1,5 +1,8 @@
-﻿using Business.Concrete;
+﻿using Business.Abstract;
+using Business.Concrete;
+using Core.Entities.Concrete;
 using Core.Utilities.Results;
+using Core.Utilities.Security.Hashing;
 using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
@@ -11,6 +14,69 @@ namespace ConsoleUI {
 			//ProductTest();
 
 			//CategoryTest();
+
+			string User1Name = "Users";
+			string User2Name = "Users2";
+			string User3Name = "Users3";
+			List<User> userList1 = new List<User>() {
+				CreateAUser(User1Name + (Guid.NewGuid().ToString())),
+				CreateAUser(User1Name + (Guid.NewGuid().ToString())),
+				CreateAUser(User1Name + (Guid.NewGuid().ToString()))
+			};
+			List<User> userList2 = new List<User>() {
+				CreateAUser(User2Name + (Guid.NewGuid().ToString())),
+				CreateAUser(User2Name + (Guid.NewGuid().ToString())),
+				CreateAUser(User2Name + (Guid.NewGuid().ToString()))
+			};
+			List<User> userList3 = new List<User>() {
+				CreateAUser(User3Name + (Guid.NewGuid().ToString())),
+				CreateAUser(User3Name + (Guid.NewGuid().ToString())),
+				CreateAUser(User3Name + (Guid.NewGuid().ToString()))
+			};
+			var customUserList = new Dictionary<string, List<User>> { 
+				{ User1Name, userList1 },
+				{ User2Name, userList2 },
+				{ User3Name, userList3 }
+		};
+
+			EfUserDal userService = new EfUserDal();
+			userService.InsertCustomData<User>(customUserList);
+
+			//User user1 = CreateAUser(User1Name);
+			//User user2 = CreateAUser(User2Name);
+			//User user3 = CreateAUser(User3Name);
+
+			//using (NorthwindContext context = new NorthwindContext()) {
+			//}
+			//using (NorthwindContext context = new NorthwindContext(User1Name)){
+
+			//	context.Add(user1);
+			//	context.SaveChanges();
+			//}
+			//using (NorthwindContext context = new NorthwindContext(User2Name)) {
+
+			//	context.Add(user2);
+			//	context.SaveChanges();
+			//}
+			//using (NorthwindContext context = new NorthwindContext(User3Name)) {
+
+			//	context.Add(user3);
+			//	context.SaveChanges();
+			//}
+
+
+		}
+		private static User CreateAUser(string name) {
+			byte[] passwordHash, passwordSalt;
+			HashingHelper.CreatePasswordHash(name, out passwordHash, out passwordSalt);
+			return new User {
+				Email = name + "@" + name + ".com",
+				FirstName =  name,
+				LastName = name + "-lastname",
+				PasswordHash = passwordHash,
+				PasswordSalt = passwordSalt,
+				Status = true
+			};
 		}
 
 		/*private static void CategoryTest() {
