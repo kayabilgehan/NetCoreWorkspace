@@ -15,32 +15,44 @@ namespace ConsoleUI {
 
 			//CategoryTest();
 
-			string User1Name = "Users";
-			string User2Name = "Users2";
-			string User3Name = "Users3";
-			List<User> userList1 = new List<User>() {
-				CreateAUser(User1Name + (Guid.NewGuid().ToString())),
-				CreateAUser(User1Name + (Guid.NewGuid().ToString())),
-				CreateAUser(User1Name + (Guid.NewGuid().ToString()))
-			};
-			List<User> userList2 = new List<User>() {
-				CreateAUser(User2Name + (Guid.NewGuid().ToString())),
-				CreateAUser(User2Name + (Guid.NewGuid().ToString())),
-				CreateAUser(User2Name + (Guid.NewGuid().ToString()))
-			};
-			List<User> userList3 = new List<User>() {
-				CreateAUser(User3Name + (Guid.NewGuid().ToString())),
-				CreateAUser(User3Name + (Guid.NewGuid().ToString())),
-				CreateAUser(User3Name + (Guid.NewGuid().ToString()))
-			};
-			var customUserList = new Dictionary<string, List<User>> { 
-				{ User1Name, userList1 },
-				{ User2Name, userList2 },
-				{ User3Name, userList3 }
-		};
 
-			EfUserDal userService = new EfUserDal();
-			userService.InsertCustomData<User>(customUserList);
+			/////////////////////////////////////////////
+			//string User1Name = "Users";
+			//string User2Name = "Users2";
+			//string User3Name = "Users3";
+			//List<User> userList1 = new List<User>() {
+			//	CreateAUser(User1Name + (Guid.NewGuid().ToString())),
+			//	CreateAUser(User1Name + (Guid.NewGuid().ToString())),
+			//	CreateAUser(User1Name + (Guid.NewGuid().ToString()))
+			//};
+			//List<User> userList2 = new List<User>() {
+			//	CreateAUser(User2Name + (Guid.NewGuid().ToString())),
+			//	CreateAUser(User2Name + (Guid.NewGuid().ToString())),
+			//	CreateAUser(User2Name + (Guid.NewGuid().ToString()))
+			//};
+			//List<User> userList3 = new List<User>() {
+			//	CreateAUser(User3Name + (Guid.NewGuid().ToString())),
+			//	CreateAUser(User3Name + (Guid.NewGuid().ToString())),
+			//	CreateAUser(User3Name + (Guid.NewGuid().ToString()))
+			//};
+			//var customUserList = new Dictionary<string, List<User>> { 
+			//	{ User1Name, userList1 },
+			//	{ User2Name, userList2 },
+			//	{ User3Name, userList3 }
+			//};
+
+			//EfUserDal userService = new EfUserDal();
+			//userService.InsertCustomData<User>(customUserList);
+
+			/////////////////////////////////////////////
+
+			//User user = CreateAUser("Bilgehan KAYA", "1");
+
+			//EfUserDal userService = new EfUserDal();
+			//userService.Add(user);
+
+			/////////////////////////////////////////////
+
 
 			//User user1 = CreateAUser(User1Name);
 			//User user2 = CreateAUser(User2Name);
@@ -63,12 +75,11 @@ namespace ConsoleUI {
 			//	context.Add(user3);
 			//	context.SaveChanges();
 			//}
-
-
 		}
-		private static User CreateAUser(string name) {
+		private static User CreateAUser(string name, string password) {
+			/////////////////////////////////////////////
 			byte[] passwordHash, passwordSalt;
-			HashingHelper.CreatePasswordHash(name, out passwordHash, out passwordSalt);
+			HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
 			return new User {
 				Email = name + "@" + name + ".com",
 				FirstName =  name,
@@ -77,6 +88,7 @@ namespace ConsoleUI {
 				PasswordSalt = passwordSalt,
 				Status = true
 			};
+			/////////////////////////////////////////////
 		}
 
 		/*private static void CategoryTest() {
@@ -98,18 +110,18 @@ namespace ConsoleUI {
 				Console.WriteLine(product.ProductName);
 			}*/
 
-			/*IDataResult<List<ProductDetailDto>> dataResult = productManager.GetProductDetails();
-			if (dataResult.Success) {
-				List<ProductDetailDto> productsDetailsList = dataResult.Data;
-				foreach (ProductDetailDto productDetail in productsDetailsList) {
-					Console.WriteLine(productDetail.ProductName + " / " + productDetail.CategoryName);
-				}
+		/*IDataResult<List<ProductDetailDto>> dataResult = productManager.GetProductDetails();
+		if (dataResult.Success) {
+			List<ProductDetailDto> productsDetailsList = dataResult.Data;
+			foreach (ProductDetailDto productDetail in productsDetailsList) {
+				Console.WriteLine(productDetail.ProductName + " / " + productDetail.CategoryName);
 			}
-			else {
-                Console.WriteLine(dataResult.Message);
-            }
+		}
+		else {
+			Console.WriteLine(dataResult.Message);
+		}
 
-			return;
-		}*/
+		return;
+	}*/
 	}
 }
